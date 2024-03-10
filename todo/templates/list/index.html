@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block 'main' %}
+
+<!-- Main Section -->
+
+<h1 align="center" class="mt-4">To Do List</h1>
+
+{% if user.is_authenticated %}
+<h3 align="center" class="mt-4">Welcome {{user.username}}</h3>
+{% endif %}
+
+{% if task %}
+<h5 align="center">{{task}}</h5>
+{% endif %}
+
+<div class="container mt-5" align="center">
+  {% if errmsg %}
+  <div class="alert alert-success">
+    {{errmsg}}
+  </div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" placeholder="add task" name="detail" class="inp">
+    <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i></button>
+  </form>
+
+
+  <div class="row1 mt-3 mb-5">
+    <div class="col1 my-1">
+      <a href="/">
+        <h4 class="text-dark">All</h4>
+      </a>
+    </div>
+    <div class="col1 my-1">
+      <a href="/sort/2">
+        <h4 class="text-dark">Incomplete</h4>
+      </a>
+    </div>
+    <div class="col1 my-1">
+      <a href="/sort/1">
+        <h4 class="text-dark">Completed</h4>
+      </a>
+    </div>
+    <div class="col1 my-1">
+      <a href="/sort/3">
+        <h4 class="text-dark">Delete All</h4>
+      </a>
+    </div>
+  </div>
+
+
+</div>
+
+{% if nodata %}
+<h1 align="center">{{nodata}}</h1>
+{% endif %}
+
+<table align="center" class="tb mb-5">
+  {% for x in data %}
+
+  <tr>
+    {% if x.iscompleted == 1 %}
+    <td class="tds">
+      <ul>
+        <li><a href="/comp/{{x.id}}" class="text-dark">
+            <h4 class="ms-3 me-5"><del>{{x.detail}}</del></h4>
+          </a></li>
+      </ul>
+    </td>
+    <td>
+      <i class="bi bi-check-circle-fill me-5"></i>
+    </td>
+    {% else %}
+    <td class="tds">
+      <ul>
+        <li><a href="/comp/{{x.id}}" class="text-dark">
+            <h4 class="ms-3 me-5">{{x.detail}}</h4>
+          </a></li>
+      </ul>
+    </td>
+    <td>
+      <i class="bi bi-check-circle me-5"></i>
+    </td>
+    {% endif %}
+
+    <td>
+      <a href="/delete/{{x.id}}"><i class="bi bi-trash3 me-3 text-dark"></i></a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+<!-- Main Section End -->
+
+{% endblock 'main' %}
